@@ -1,8 +1,21 @@
 package com.mycompany.dailyexpensemanager.user;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "dem_users")
 public class User {
 
-    private String id;
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Column(name = "user_id")
+    private Long id;
+
     private String firstName;
     private String lastName;
     private String email;
@@ -10,6 +23,7 @@ public class User {
     private String profileImage;
     private int enabled;
 
+    public User(){}
 
     public User(String firstName, String lastName, String email, String mobileNumber) {
         this.firstName = firstName;
@@ -18,6 +32,13 @@ public class User {
         this.mobileNumber = mobileNumber;
     }
 
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
+    }
 
     public String getProfileImage() {
         return profileImage;
@@ -27,10 +48,13 @@ public class User {
         this.profileImage = profileImage;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;

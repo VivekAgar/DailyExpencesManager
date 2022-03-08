@@ -44,6 +44,11 @@ public class ExpensesController {
         return expenseService.getExpensesByPaymentMethod(paymentMethod);
     }
 
+    @RequestMapping(method=RequestMethod.POST, value="/expenses/{userId}/add")
+    public void addExpense(@RequestBody Expense expense, @PathVariable String userId) {
+        expenseService.addExpense(Long.valueOf(userId), expense);
+    }
+
 
 
 

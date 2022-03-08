@@ -1,8 +1,14 @@
 package com.mycompany.dailyexpensemanager.expenses;
 
 
+import com.mycompany.dailyexpensemanager.exception.DailyExpenseManagerException;
+import com.mycompany.dailyexpensemanager.user.User;
+import com.mycompany.dailyexpensemanager.user.UserRepository;
+import com.mycompany.dailyexpensemanager.utility.ApplicationConstants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,6 +16,11 @@ import java.util.stream.Collectors;
 @Service
 public class ExpensesService {
 
+    @Autowired
+    ExpensesRepository expensesRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     private List<Expense> expenses = Arrays.asList(
     //public Expense(float amount, String dateString, String tags, String description, String paymentMethod, String category) {
@@ -28,7 +39,10 @@ public class ExpensesService {
 
 
     public List<Expense> getAllExpenses() {
-        return expenses.stream().sorted((o1, o2) -> o1.getDateString().compareTo(o2.getDateString())).collect(Collectors.toUnmodifiableList());
+        List<Expense> expenses = new ArrayList();
+        expensesRepository.findAll().forEach(expense -> expenses.add(expense));
+        return expenses;
+        //return expenses.stream().sorted((o1, o2) -> o1.getDateString().compareTo(o2.getDateString())).collect(Collectors.toUnmodifiableList());
     }
 
 
@@ -44,4 +58,34 @@ public class ExpensesService {
     public List<Expense> getExpensesByPaymentMethod(String paymentMethod) {
         return expenses.stream().filter(e-> e.getPaymentMethod().equalsIgnoreCase(paymentMethod)).toList();
     }
+
+//    public void addExpense(Expense expense){
+//        expensesRepository.save(expense);
+//
+//    }
+    public String addExpense(Long userId, Expense expense){
+
+        //Validate user
+        User  user = validateUser(userId);
+        //validate input fields
+
+        //save
+        saveExpense(user, expense);
+        return "added successfully";
+    }
+
+    private User validateUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new DailyExpenseManagerException(ApplicationConstants.VALIDATION_USER_ID));
+    }
+
+
+    private String saveExpense(User user, Expense expense) {
+        Expense expenseEntry = new Expense(expense.getAmount(), expense.getDateString(), expense.getTags(), expense.getDescription(), expense.getPaymentMethod(), expense.getCategory(), expense.getMerchant(), user);
+        expensesRepository.save(expenseEntry);
+        return ApplicationConstants.ADDED_DESC;
+    }
+
+
+
 }

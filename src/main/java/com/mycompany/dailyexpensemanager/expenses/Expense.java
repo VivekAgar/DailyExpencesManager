@@ -1,10 +1,25 @@
 package com.mycompany.dailyexpensemanager.expenses;
 
+import com.mycompany.dailyexpensemanager.user.User;
+
+import java.io.Serializable;
 import java.util.UUID;
+import javax.persistence.*;
 
-public class Expense {
 
-    private String id;
+@Entity
+@Table(name="Expenses")
+public class Expense implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name = "expense_id")
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name ="user_id")
+    private User userDetails;
+
     private float amount;
     private String dateString;
     private String tags;
@@ -13,9 +28,13 @@ public class Expense {
     private String paymentMethod;
     private String category;
 
+    public Expense(){
+
+    }
+
     public Expense(float amount, String dateString, String tags, String description, String paymentMethod, String category, String merchant) {
 
-        this.id = UUID.randomUUID().toString();
+        //this.id = UUID.randomUUID();
         this.amount = amount;
         this.dateString = dateString;
         this.tags = tags;
@@ -25,8 +44,30 @@ public class Expense {
         this.merchant = merchant;
     }
 
-    public String getId() {
+
+    public Expense(float amount, String dateString, String tags, String description, String paymentMethod, String category, String merchant, User userDetails) {
+
+        this.userDetails = userDetails;
+        this.amount = amount;
+        this.dateString = dateString;
+        this.tags = tags;
+        this.description = description;
+        this.paymentMethod = paymentMethod;
+        this.category = category;
+        this.merchant = merchant;
+    }
+
+
+    public Long getId() {
         return id;
+    }
+
+    public User getUserDetails() {
+        return userDetails;
+    }
+
+    public void setUserDetails(User userDetails) {
+        this.userDetails = userDetails;
     }
 
     public String getMerchant() {
