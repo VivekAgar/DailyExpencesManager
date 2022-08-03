@@ -19,24 +19,46 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
+    private String password;
     private String mobileNumber;
     private String profileImage;
-    private int enabled;
+    private Boolean enabled;
+    private String roles;
 
     public User(){}
 
-    public User(String firstName, String lastName, String email, String mobileNumber) {
+    public User(String firstName, String lastName, String email, String mobileNumber, String password, String roles, Boolean enabled) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.mobileNumber = mobileNumber;
+        this.password = password;
+        this.roles = roles;
+        this.enabled = enabled;
     }
 
-    public int getEnabled() {
+
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Boolean getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(int enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 

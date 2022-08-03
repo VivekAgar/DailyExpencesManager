@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name="Expenses")
+@Table(name="expenses")
 public class Expense implements Serializable {
 
     @Id
